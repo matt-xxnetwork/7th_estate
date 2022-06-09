@@ -10,7 +10,7 @@
     <div *ngIf="hash; then StatusBlock else NoStatusBlock"></div>
 
         <ng-template #StatusBlock>
-            <div class="alert alert-info">
+            <div>
                 <app-waiting-receipt [hash]="hash" [status]="status"></app-waiting-receipt>
             </div>
         </ng-template>

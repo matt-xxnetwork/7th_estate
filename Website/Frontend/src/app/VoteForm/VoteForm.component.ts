@@ -38,7 +38,7 @@ export class VoteFormComponent implements OnInit {
           console.log(response);
           this.error = response["errormessage"] || null;
           this.receipt = response["receipt"] || null;
-          this.status = response['status'] || null;
+          this.status = 'Your vote was successfully posted' || null;
           this.hash = response['hash'] || null;
         });
     }

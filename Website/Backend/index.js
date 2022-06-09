@@ -2,7 +2,7 @@ const express = require('express')
 const config = require('./config.json')
 const helmet = require('helmet')
 const csrf = require('csurf')
-const csrfProtection = csrf({ cookie: true })
+// const csrfProtection = csrf({ cookie: true })
 const cookieParser = require('cookie-parser')
 const fs = require('fs');
 const Blockchain = require('./blockchain.js').Blockchain
@@ -38,11 +38,15 @@ app.use(cookieParser())
 app.use(express.json()); // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
-app.get(config.apipath + '/csrf', csrfProtection, (req, response) => {
-    response.send({ csrf: req.csrfToken() });
-})
+app.get('/', (req, res) => {
+  res.send('Welcome');
+});
 
-app.post(config.apipath, csrfProtection, (req, response) => {
+app.get('/csrf', (req, res) => {
+  res.send('This is a token trust me');
+});
+
+app.post('/', (req, response) => {
     console.log(req.body);
     let votecode = req.body.votecode;
     try{
@@ -50,38 +54,12 @@ app.post(config.apipath, csrfProtection, (req, response) => {
             error(response, "Invalid votecode");
         }
 
-        // Check if vote is in blockchain
-        // voteInBlockchain(votecode)
-        //     .then(tx => {
-        //         if (tx) {
-        //             error(response, "Vote already in blockchain");
-        //         }
-        //         // Post vote
-        //     postVote(votecode)
-        //         .then((result => {
-        //             if (!result){
-		// 	console.log("Error");
-        //                 error(response, "Error posting in blockchain");
-        //             }
-                
-        //             // Provide receipt
-        //             console.log("Hash sent: ", result)
-        //             sendResponse(response, {
-        //                 hash: result,
-        //                 status: "Validating your vote... You can check the status with the transaction hash"
-        //             });
-        //             fs.appendFile(VOTES_FILE_PATH, votecode + '\n', file_err);
-        //             // Provide proof that vote is on chain
-        //             // response.end();
+        fs.appendFile(VOTES_FILE_PATH, votecode + '\n', file_err);
 
-        //         }))
-        //         .catch((err) => {
-        //             error(response, err.message , err);
-        //             return;
-        //         })
-        //     })
-
-        
+        sendResponse(response, {
+          hash: 'hashbrown',
+          status: "Validating your vote... You can check the status with the transaction"
+        });
     }
     catch(err) {
         error(response, "Error processing request", err);
@@ -90,21 +68,21 @@ app.post(config.apipath, csrfProtection, (req, response) => {
    
 })
 
-app.get(config.apipath + '/status/:hash', (req, response) => {
-    var hash = req.params.hash;
-    checkReceipt(hash)
-    .then((status) => {
-        console.log(status);
-        sendResponse(response, {
-            receipt: status ? JSON.stringify(status) : null,
-            status:  status? "Your vote was successfully posted to blockchain, here is the transaction receipt": null
-        });  
+// app.get(config.apipath + '/status/:hash', (req, response) => {
+//     var hash = req.params.hash;
+//     checkReceipt(hash)
+//     .then((status) => {
+//         console.log(status);
+//         sendResponse(response, {
+//             receipt: status ? JSON.stringify(status) : null,
+//             status:  status? "Your vote was successfully posted to blockchain, here is the transaction receipt": null
+//         });  
 
-    })
-    .catch((err) => {
-        error(response, "Error getting tx status:" , err)
-    });
-})
+//     })
+//     .catch((err) => {
+//         error(response, "Error getting tx status:" , err)
+//     });
+// })
 
 function error(response, message, err = null) {
     console.log(message, err ? err.message : "");

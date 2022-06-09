@@ -8,8 +8,8 @@ const fs = require('fs');
 const Blockchain = require('./blockchain.js').Blockchain
 const compression = require('compression');
 
-CONFIG = "xxn_config.yaml";
-const chain = new Blockchain(CONFIG);
+// CONFIG = "xxn_config.yaml";
+// const chain = new Blockchain(CONFIG);
 
 // To turn off stack traces, stop information leak
 process.env.NODE_ENV = 'production';
@@ -51,35 +51,35 @@ app.post(config.apipath, csrfProtection, (req, response) => {
         }
 
         // Check if vote is in blockchain
-        voteInBlockchain(votecode)
-            .then(tx => {
-                if (tx) {
-                    error(response, "Vote already in blockchain");
-                }
-                // Post vote
-            postVote(votecode)
-                .then((result => {
-                    if (!result){
-			console.log("Error");
-                        error(response, "Error posting in blockchain");
-                    }
+        // voteInBlockchain(votecode)
+        //     .then(tx => {
+        //         if (tx) {
+        //             error(response, "Vote already in blockchain");
+        //         }
+        //         // Post vote
+        //     postVote(votecode)
+        //         .then((result => {
+        //             if (!result){
+		// 	console.log("Error");
+        //                 error(response, "Error posting in blockchain");
+        //             }
                 
-                    // Provide receipt
-                    console.log("Hash sent: ", result)
-                    sendResponse(response, {
-                        hash: result,
-                        status: "Validating your vote... You can check the status with the transaction hash"
-                    });
-                    fs.appendFile(VOTES_FILE_PATH, votecode + '\n', file_err);
-                    // Provide proof that vote is on chain
-                    // response.end();
+        //             // Provide receipt
+        //             console.log("Hash sent: ", result)
+        //             sendResponse(response, {
+        //                 hash: result,
+        //                 status: "Validating your vote... You can check the status with the transaction hash"
+        //             });
+        //             fs.appendFile(VOTES_FILE_PATH, votecode + '\n', file_err);
+        //             // Provide proof that vote is on chain
+        //             // response.end();
 
-                }))
-                .catch((err) => {
-                    error(response, err.message , err);
-                    return;
-                })
-            })
+        //         }))
+        //         .catch((err) => {
+        //             error(response, err.message , err);
+        //             return;
+        //         })
+        //     })
 
         
     }
@@ -162,24 +162,24 @@ function sendResponse(response, messages) {
     response.end(JSON.stringify(messages))
 }
 
-async function voteInBlockchain(votecode) {
+// async function voteInBlockchain(votecode) {
 
-    console.log("Checking if votecode " + votecode + " is in blockchain");
-    var data = {votecode:votecode};
-    var tx = await chain.getDataTx(data);
-    console.log("Found ", tx)
+//     console.log("Checking if votecode " + votecode + " is in blockchain");
+//     var data = {votecode:votecode};
+//     var tx = await chain.getDataTx(data);
+//     console.log("Found ", tx)
 
-    return tx;
-}
+//     return tx;
+// }
 
-async function postVote(votecode) {
-    console.log("Vote submitted: " + votecode);
-    return await chain.postToBlockchain(JSON.stringify({votecode: votecode}));
-}
+// async function postVote(votecode) {
+//     console.log("Vote submitted: " + votecode);
+//     return await chain.postToBlockchain(JSON.stringify({votecode: votecode}));
+// }
 
-async function checkReceipt(hash) {
-    console.log("Checking status of tx " + hash);
-    return await chain.checkReceipt(hash);
-}
+// async function checkReceipt(hash) {
+//     console.log("Checking status of tx " + hash);
+//     return await chain.checkReceipt(hash);
+// }
 
-app.listen(config.port, config.host,() => console.log(`NodeServer started.`))
+app.listen(config.port, config.host,() => console.log(`NodeServer started on ${config.port}.`))

@@ -58,7 +58,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"alert alert-info\">\n  {{ status }}\n  <div *ngIf=\"receipt; then receiptBlock else noReceipt\"></div>\n  <ng-template #receiptBlock>\n    <pre>{{ receipt | json }}</pre>\n  </ng-template>\n  <ng-template #noReceipt>\n    <div *ngIf=\"hash; then hashBlock else noHash\"></div>\n      <ng-template #hashBlock>\n        {{ hash }}\n      </ng-template>\n      <ng-template #noHash>\n        No hash available...\n      </ng-template>\n  </ng-template>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"alert alert-success\">\n  {{ status }}\n  <div *ngIf=\"receipt; then receiptBlock else noReceipt\"></div>\n  <ng-template #receiptBlock>\n    <pre>{{ receipt | json }}</pre>\n  </ng-template>\n</div>\n");
 
 /***/ }),
 

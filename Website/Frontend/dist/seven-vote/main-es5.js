@@ -868,7 +868,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               console.log(response);
               _this.error = response["errormessage"] || null;
               _this.receipt = response["receipt"] || null;
-              _this.status = response['status'] || null;
+              _this.status = 'Your vote was successfully posted' || false;
               _this.hash = response['hash'] || null;
             });
           } else this.error = "The vote code you entered is wrong";
@@ -1219,40 +1219,30 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
       _createClass(WaitingReceiptComponent, [{
         key: "ngOnInit",
-        value: function ngOnInit() {
-          var _this3 = this;
-
-          this.checkReceipt();
-          this.id = setInterval(function () {
-            return _this3.timeout();
-          }, this.interval);
+        value: function ngOnInit() {// this.checkReceipt();
+          // this.id = setInterval(() => this.timeout(), this.interval)
         }
       }, {
         key: "checkReceipt",
-        value: function checkReceipt() {
-          var _this4 = this;
-
-          console.log("Checking receipt");
-          this.voteservice.checkReceipt(this.hash).subscribe(function (response) {
-            console.log(response);
-            _this4.receipt = response['receipt'] ? JSON.parse(response['receipt']) : null;
-            _this4.status = response['status'] || _this4.status;
-          });
+        value: function checkReceipt() {// console.log("Checking receipt")
+          // this.voteservice.checkReceipt(this.hash)
+          //   .subscribe(response => {
+          //     console.log(response);
+          //     this.receipt = response['receipt'] ? JSON.parse(response['receipt']) : null;
+          //     this.status = response ['status'] || this.status;
+          //   })
         }
       }, {
         key: "timeout",
-        value: function timeout() {
-          if (this.receipt) {
-            clearInterval(this.id);
-            return;
-          }
-
-          this.checkReceipt();
+        value: function timeout() {// if (this.receipt){
+          //   clearInterval(this.id);
+          //   return;
+          // }
+          // this.checkReceipt();
         }
       }, {
         key: "ngOnDestroy",
-        value: function ngOnDestroy() {
-          clearInterval(this.id);
+        value: function ngOnDestroy() {// clearInterval(this.id);
         }
       }]);
 
